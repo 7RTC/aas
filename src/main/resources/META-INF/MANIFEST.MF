@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: lib/hsqldb.jar lib/forms-1.1.0.jar lib/looks-2.1.4.jar lib/BrowserLauncher2-12.jar
+Created-By: AAS
+Main-Class: com.sevenrtc.aas.Main
+
