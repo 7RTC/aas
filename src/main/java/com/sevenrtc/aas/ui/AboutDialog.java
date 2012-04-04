@@ -144,8 +144,8 @@ public class AboutDialog extends JDialog {
 
 		iconeAAS.setIcon(ImageLoader.abrirImagem("/images/lgo.png", "AAS"));
 		iconeAAS.setName("iconeAAS");
-		iconeAAS.setText("Versão 1.0");
-		iconeAAS.setToolTipText("AAS Versão 1.0");
+		iconeAAS.setText("Versão 1.1");
+		iconeAAS.setToolTipText("AAS Versão 1.1");
 		iconeAAS.setVerticalTextPosition(JLabel.BOTTOM);
 		painelPrincipal.add(iconeAAS, cc.xy(2, 2));
 
@@ -190,7 +190,7 @@ public class AboutDialog extends JDialog {
 		mensagemCopyright
 				.setText("Copyright © 2007-2012 AAS Contributors. All rights reserved.");
 		mensagemCopyright.setHorizontalAlignment(JLabel.TRAILING);
-		mensagemCopyright.setToolTipText("Copyright © 2007 AAS");
+		mensagemCopyright.setToolTipText("Copyright © 2007-2012 AAS Contributors");
 		painelPrincipal.add(mensagemCopyright, cc.xywh(2, 6, 3, 1));
 
 		botaoFechar.setActionCommand("Fechar");
