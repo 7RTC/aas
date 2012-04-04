@@ -258,7 +258,7 @@ public class DAO {
     } 
 
     /**
-     * Construtor privado impede que estancias DAO sejam criadas
+     * Construtor privado impede que instancias DAO sejam criadas
      */
     private DAO() {
     }
