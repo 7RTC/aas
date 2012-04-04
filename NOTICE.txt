@@ -1,0 +1,9 @@
+This product includes software (BrowserLauncher2) developed by
+Eric Albert, Jeff Chapman and contributors (http://browserlaunch2.sourceforge.net/).
+
+This product includes software (Forms and Looks) developed by
+JGoodies Karsten Lentzsch (http://www.jgoodies.com/).
+
+This product includes software (HSQLDB) developed by
+The HSQL Development Group (http://hsqldb.org/).
+
