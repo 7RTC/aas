@@ -9,7 +9,7 @@
     
     <includeBaseDirectory>false</includeBaseDirectory>
 
-    <!-- Adds dependencies to zip package under lib directory -->
+    <!-- Adds dependencies to the package under lib directory -->
     <dependencySets>
         <dependencySet>
             <outputDirectory>lib</outputDirectory>
@@ -19,15 +19,17 @@
     </dependencySets>
 
     <fileSets>
-        <!--  Adds db files to the zip package -->
+        <!--  Adds LICENSE, NOTICE and README files to the root directory -->
         <fileSet>
-            <directory>db</directory>
-            <outputDirectory>db</outputDirectory>
+            <directory></directory>
+            <outputDirectory></outputDirectory>
             <includes>
-                <include>**/*</include>
+                <include>LICENSE.txt</include>
+                <include>NOTICE.txt</include>
+                <include>README.txt</include>
             </includes>
         </fileSet>    
-        <!-- Adds jar package to the root directory of zip package -->
+        <!-- Adds jar package to the root directory of the package -->
         <fileSet>
             <directory>target</directory>
             <outputDirectory></outputDirectory>
