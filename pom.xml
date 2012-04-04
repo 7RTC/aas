@@ -5,7 +5,7 @@
 
     <groupId>com.sevenrtc</groupId>
     <artifactId>AAS</artifactId>
-    <version>1.1</version>
+    <version>1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>AAS</name>
