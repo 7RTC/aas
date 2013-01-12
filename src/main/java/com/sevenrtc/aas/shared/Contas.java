@@ -1,16 +1,14 @@
 package com.sevenrtc.aas.shared;
 
+import com.sevenrtc.aas.db.DAO;
+import com.sevenrtc.aas.entidades.CategoriaDRE;
+import com.sevenrtc.aas.entidades.Conta;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
 import javax.swing.tree.DefaultMutableTreeNode;
-
-import com.sevenrtc.aas.db.DAO;
-import com.sevenrtc.aas.entidades.CategoriaDRE;
-import com.sevenrtc.aas.entidades.Conta;
 
 /**
  * Classe que mapeia codigo de conta a sua respectiva conta
@@ -40,26 +38,22 @@ public class Contas {
         contas.put(c.getCodigo(), c.getNome());
     }
 
-    ;
-
-	/**
-	 * Procura e adiciona os nodos descendentes do atual (recursivamente)
-	 * 
-	 * @param noPai
-	 *            nodo pai
-	 * @param mConta
-	 *            conta do nodo pai
-	 * @return nodo pai com com seus nodos descendentes adicionados
-	 */
-	public static DefaultMutableTreeNode adicionarNode(
+    /**
+     * Procura e adiciona os nodos descendentes do atual (recursivamente)
+     *
+     * @param noPai nodo pai
+     * @param mConta conta do nodo pai
+     * @return nodo pai com com seus nodos descendentes adicionados
+     */
+    public static DefaultMutableTreeNode adicionarNode(
             DefaultMutableTreeNode noPai, String mConta) {
         DefaultMutableTreeNode mAux;
         ResultSet x = contasFilhas(mConta);
         try {
             while (x.next()) {
-                mAux = new DefaultMutableTreeNode(x.getString(1) + "-"
-                        + x.getString(3));
-                adicionarNode(mAux, x.getString(1));
+                mAux = new DefaultMutableTreeNode(x.getString("CON_Codigo") + "-"
+                        + x.getString("CON_Nome"));
+                adicionarNode(mAux, x.getString("CON_Codigo"));
                 noPai.add(mAux);
             }
         } catch (SQLException e) {
@@ -69,12 +63,14 @@ public class Contas {
         return noPai;
     }
 
-    ;
-
-	/** Consulta o banco por contas filhas de determinado pai */
-	public static ResultSet contasFilhas(String contaPai) {
-        ResultSet mCursor = DAO.query("SELECT * FROM CON_CONTA WHERE CON_Pai = + '" + contaPai
-                + "' AND CTX_ID = " + Contextos.getContextoAtual());
+    /**
+     * Consulta o banco por contas filhas de determinado pai
+     */
+    public static ResultSet contasFilhas(String contaPai) {
+        ResultSet mCursor = DAO.query(
+                "SELECT * FROM CON_CONTA WHERE CON_Pai = + '" + contaPai
+                + "' AND CTX_ID = " + Contextos.getContextoAtual()
+                + " ORDER BY CON_Ordem");
 
         return mCursor;
     }
@@ -89,7 +85,7 @@ public class Contas {
         DefaultMutableTreeNode mAux;
         // Chama todas as contas no nivel superior da arvore
         ResultSet rs = DAO.query("SELECT * FROM CON_CONTA WHERE CON_PAI is null AND CTX_ID = "
-                + Contextos.getContextoAtual());
+                + Contextos.getContextoAtual() + " ORDER BY CON_Ordem");
         // Cria o nodo pai da colecao
         noPai = new DefaultMutableTreeNode(Contextos.getNomeEmpresa());
 
@@ -97,11 +93,11 @@ public class Contas {
             // Para cada conta do nivel superior da arvore (sem pai)
             while (rs.next()) {
                 // Cria um nodo para ela
-                mAux = new DefaultMutableTreeNode(rs.getString(1) + "-"
-                        + rs.getString(3));
+                mAux = new DefaultMutableTreeNode(rs.getString("CON_Codigo") + "-"
+                        + rs.getString("CON_Nome"));
                 noPai.add(mAux);
                 // E procura por todos seus descendentes
-                adicionarNode(mAux, rs.getString(1));
+                adicionarNode(mAux, rs.getString("CON_Codigo"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -233,191 +229,191 @@ public class Contas {
             try {
                 // ** Ativo
                 Conta.store(new Conta("1", Contextos.getContextoAtual(),
-                        "Ativo", 0, 'a', 's', null, 0));
+                        "Ativo", 0, 'a', 's', null, 1, 0));
                 // Circulante
                 Conta.store(new Conta("1.1", Contextos.getContextoAtual(),
-                        "Circulante", 0, 'a', 's', "1", 0));
+                        "Circulante", 0, 'a', 's', "1", 1, 0));
                 Conta.store(new Conta("1.1.1", Contextos.getContextoAtual(),
-                        "Caixa", 0, 'a', 'a', "1.1", 0));
+                        "Caixa", 0, 'a', 'a', "1.1", 1, 0));
                 Conta.store(new Conta("1.1.2", Contextos.getContextoAtual(),
-                        "Banco", 0, 'a', 'a', "1.1", 0));
+                        "Banco", 0, 'a', 'a', "1.1", 2, 0));
                 Conta.store(new Conta("1.1.3", Contextos.getContextoAtual(),
-                        "Duplicatas a receber", 0, 'a', 'a', "1.1", 0));
+                        "Duplicatas a receber", 0, 'a', 'a', "1.1", 3, 0));
                 Conta.store(new Conta("1.1.4", Contextos.getContextoAtual(),
-                        "Estoques", 0, 'a', 'a', "1.1", 0));
+                        "Estoques", 0, 'a', 'a', "1.1", 4, 0));
                 Conta.store((new Conta("1.1.5",
                         Contextos.getContextoAtual(),
                         "Despesas pagas antecipadamente", 0, 'a', 'a',
-                        "1.1", 0)));
+                        "1.1", 5, 0)));
                 // Realizável a longo prazo
                 Conta.store(new Conta("1.2", Contextos.getContextoAtual(),
-                        "Realizável a Longo Prazo", 0, 'a', 's', "1", 0));
+                        "Realizável a Longo Prazo", 0, 'a', 's', "1", 2, 0));
                 Conta.store(new Conta("1.2.1", Contextos.getContextoAtual(),
-                        "Contas a receber", 0, 'a', 'a', "1.2", 0));
+                        "Contas a receber", 0, 'a', 'a', "1.2", 1, 0));
                 // Permanente
                 Conta.store(new Conta("1.3", Contextos.getContextoAtual(),
-                        "Permanente", 0, 'a', 's', "1", 0));
+                        "Permanente", 0, 'a', 's', "1", 3, 0));
                 Conta.store(new Conta("1.3.1", Contextos.getContextoAtual(),
-                        "Equipamentos", 0, 'a', 'a', "1.3", 0));
+                        "Equipamentos", 0, 'a', 'a', "1.3", 1, 0));
                 Conta.store(new Conta("1.3.2", Contextos.getContextoAtual(),
-                        "Terrenos", 0, 'a', 'a', "1.3", 0));
+                        "Terrenos", 0, 'a', 'a', "1.3", 2, 0));
                 Conta.store(new Conta("1.3.3", Contextos.getContextoAtual(),
-                        "Imóveis", 0, 'a', 'a', "1.3", 0));
+                        "Imóveis", 0, 'a', 'a', "1.3", 3, 0));
                 Conta.store(new Conta("1.3.4", Contextos.getContextoAtual(),
-                        "Veículos", 0, 'a', 'a', "1.3", 0));
+                        "Veículos", 0, 'a', 'a', "1.3", 4, 0));
                 Conta.store(new Conta("1.3.5", Contextos.getContextoAtual(),
-                        "Móveis e Utensílios", 0, 'a', 'a', "1.3", 0));
+                        "Móveis e Utensílios", 0, 'a', 'a', "1.3", 5, 0));
 
                 // ** Passivo
                 Conta.store(new Conta("2", Contextos.getContextoAtual(),
-                        "Passivo", 0, 'p', 's', null, 0));
+                        "Passivo", 0, 'p', 's', null, 2, 0));
                 // Circulante
                 Conta.store(new Conta("2.1", Contextos.getContextoAtual(),
-                        "Circulante", 0, 'p', 's', "2", 0));
+                        "Circulante", 0, 'p', 's', "2", 1, 0));
                 Conta.store(new Conta("2.1.1", Contextos.getContextoAtual(),
-                        "Fornecedores", 0, 'p', 'a', "2.1", 0));
+                        "Fornecedores", 0, 'p', 'a', "2.1", 1, 0));
                 Conta.store(new Conta("2.1.2", Contextos.getContextoAtual(),
-                        "Impostos a recolher", 0, 'p', 'a', "2.1", 0));
+                        "Impostos a recolher", 0, 'p', 'a', "2.1", 2, 0));
                 Conta.store(new Conta("2.1.3", Contextos.getContextoAtual(),
-                        "Salários a Pagar", 0, 'p', 'a', "2.1", 0));
+                        "Salários a Pagar", 0, 'p', 'a', "2.1", 3, 0));
                 Conta.store(new Conta("2.1.4", Contextos.getContextoAtual(),
-                        "Encargos Sociais a Recolher", 0, 'p', 'a', "2.1", 0));
+                        "Encargos Sociais a Recolher", 0, 'p', 'a', "2.1", 4, 0));
                 Conta.store(new Conta("2.1.5", Contextos.getContextoAtual(),
-                        "Empréstimos a Pagar", 0, 'p', 'a', "2.1", 0));
+                        "Empréstimos a Pagar", 0, 'p', 'a', "2.1", 5, 0));
                 Conta.store(new Conta("2.1.6", Contextos.getContextoAtual(),
-                        "Contas a Pagar", 0, 'p', 'a', "2.1", 0));
+                        "Contas a Pagar", 0, 'p', 'a', "2.1", 6, 0));
                 Conta.store(new Conta("2.1.7", Contextos.getContextoAtual(),
-                        "Títulos a Pagar", 0, 'p', 'a', "2.1", 0));
+                        "Títulos a Pagar", 0, 'p', 'a', "2.1", 7, 0));
                 // Exigível a Longo Prazo
                 Conta.store(new Conta("2.2", Contextos.getContextoAtual(),
-                        "Exigível a longo prazo", 0, 'p', 's', "2", 0));
+                        "Exigível a longo prazo", 0, 'p', 's', "2", 2, 0));
                 Conta.store(new Conta("2.2.1", Contextos.getContextoAtual(),
-                        "Financiamentos", 0, 'p', 'a', "2.2", 0));
+                        "Financiamentos", 0, 'p', 'a', "2.2", 1, 0));
 
                 // Patrimônio Líquido
                 Conta.store(new Conta("3", Contextos.getContextoAtual(),
-                        "Patrimônio Líquido", 0, 'l', 's', null, 0));
+                        "Patrimônio Líquido", 0, 'l', 's', null, 3, 0));
                 Conta.store(new Conta("3.1", Contextos.getContextoAtual(),
-                        "Capital", 0, 'l', 'a', "3", 0));
+                        "Capital", 0, 'l', 'a', "3", 1, 0));
                 Conta.store(new Conta("3.2", Contextos.getContextoAtual(),
-                        "Lucros Acumulados", 0, 'l', 'a', "3", 0));
+                        "Lucros Acumulados", 0, 'l', 'a', "3", 2, 0));
                 Conta.store(new Conta("3.3", Contextos.getContextoAtual(),
-                        "Reservas", 0, 'l', 'a', "3", 0));
+                        "Reservas", 0, 'l', 'a', "3", 3, 0));
 
                 // ** Vendas e Deduções
                 Conta.store(new Conta("4", Contextos.getContextoAtual(),
-                        "Vendas", 0, 'r', 's', null, 0));
+                        "Vendas", 0, 'r', 's', null, 4, 0));
                 // Vendas Brutas
                 Conta.store(new Conta("4.1", Contextos.getContextoAtual(),
-                        "Vendas Brutas", 0, 'r', 's', "4", 0));
+                        "Vendas Brutas", 0, 'r', 's', "4", 1, 0));
                 Conta.store(new Conta("4.1.1", Contextos.getContextoAtual(),
-                        "Mercado Interno", 0, 'r', 'a', "4.1", 1));
+                        "Mercado Interno", 0, 'r', 'a', "4.1", 1, 1));
                 Conta.store(new Conta("4.1.2", Contextos.getContextoAtual(),
-                        "Mercado Externo", 0, 'r', 'a', "4.1", 1));
+                        "Mercado Externo", 0, 'r', 'a', "4.1", 2, 1));
                 // Deduções
                 Conta.store(new Conta("4.2", Contextos.getContextoAtual(),
-                        "Deduções", 0, 'd', 's', "4", 0));
+                        "Deduções", 0, 'd', 's', "4", 2, 0));
                 Conta.store(new Conta("4.2.1", Contextos.getContextoAtual(),
-                        "IPI", 0, 'd', 'a', "4.2", 2));
+                        "IPI", 0, 'd', 'a', "4.2", 1, 2));
                 Conta.store(new Conta("4.2.2", Contextos.getContextoAtual(),
-                        "ICMS", 0, 'd', 'a', "4.2", 2));
+                        "ICMS", 0, 'd', 'a', "4.2", 2, 2));
                 Conta.store(new Conta("4.2.3", Contextos.getContextoAtual(),
-                        "ISS", 0, 'd', 'a', "4.2", 2));
+                        "ISS", 0, 'd', 'a', "4.2", 3, 2));
                 Conta.store(new Conta("4.2.4", Contextos.getContextoAtual(),
-                        "Impostos Diversos", 0, 'd', 'a', "4.2", 2));
+                        "Impostos Diversos", 0, 'd', 'a', "4.2", 4, 2));
                 Conta.store(new Conta("4.2.5", Contextos.getContextoAtual(),
-                        "Devoluções", 0, 'd', 'a', "4.2", 2));
+                        "Devoluções", 0, 'd', 'a', "4.2", 5, 2));
                 Conta.store(new Conta("4.2.6", Contextos.getContextoAtual(),
-                        "Abatimentos", 0, 'd', 'a', "4.2", 2));
+                        "Abatimentos", 0, 'd', 'a', "4.2", 6, 2));
 
                 // ** Despesas
                 Conta.store(new Conta("5", Contextos.getContextoAtual(),
-                        "Despesas", 0, 'd', 's', null, 0));
+                        "Despesas", 0, 'd', 's', null, 5, 0));
                 // Custos dos Produtos Vendidos
                 Conta.store(new Conta("5.1", Contextos.getContextoAtual(),
-                        "Custos dos Produtos Vendidos", 0, 'd', 's', "5", 3));
+                        "Custos dos Produtos Vendidos", 0, 'd', 's', "5", 1, 3));
                 Conta.store(new Conta("5.1.1", Contextos.getContextoAtual(),
-                        "Matéria Prima", 0, 'd', 'a', "5.1", 0));
+                        "Matéria Prima", 0, 'd', 'a', "5.1", 1, 0));
                 Conta.store(new Conta("5.1.2", Contextos.getContextoAtual(),
-                        "Mão-de-obra Direta", 0, 'd', 'a', "5.1", 0));
+                        "Mão-de-obra Direta", 0, 'd', 'a', "5.1", 2, 0));
                 Conta.store(new Conta("5.1.3", Contextos.getContextoAtual(),
-                        "Aluguel da Fábrica", 0, 'd', 'a', "5.1", 0));
+                        "Aluguel da Fábrica", 0, 'd', 'a', "5.1", 3, 0));
                 Conta.store(new Conta("5.1.4", Contextos.getContextoAtual(),
-                        "Energia Elétrica", 0, 'd', 'a', "5.1", 0));
+                        "Energia Elétrica", 0, 'd', 'a', "5.1", 4, 0));
                 Conta.store(new Conta("5.1.5", Contextos.getContextoAtual(),
-                        "Depreciação de Equipamentos", 0, 'd', 'a', "5.1", 0));
+                        "Depreciação de Equipamentos", 0, 'd', 'a', "5.1", 5, 0));
                 // Despesas de Vendas
                 Conta.store(new Conta("5.2", Contextos.getContextoAtual(),
-                        "Despesas de Vendas", 0, 'd', 's', "5", 4));
+                        "Despesas de Vendas", 0, 'd', 's', "5", 2, 4));
                 Conta.store(new Conta("5.2.1", Contextos.getContextoAtual(),
-                        "Comissão de Vendedores", 0, 'd', 'a', "5.2", 0));
+                        "Comissão de Vendedores", 0, 'd', 'a', "5.2", 1, 0));
                 Conta.store(new Conta("5.2.2", Contextos.getContextoAtual(),
-                        "Propaganda", 0, 'd', 'a', "5.2", 0));
+                        "Propaganda", 0, 'd', 'a', "5.2", 2, 0));
                 Conta.store(new Conta("5.2.3", Contextos.getContextoAtual(),
                         "Salários do Pessoal de Vendas", 0, 'd', 'a',
-                        "5.2", 0));
+                        "5.2", 3, 0));
                 Conta.store(new Conta("5.2.4", Contextos.getContextoAtual(),
-                        "Devedores Duvidosos", 0, 'd', 'a', "5.2", 0));
+                        "Devedores Duvidosos", 0, 'd', 'a', "5.2", 4, 0));
                 // Despesas Administrativas
                 Conta.store(new Conta("5.3", Contextos.getContextoAtual(),
-                        "Despesas Administrativas", 0, 'd', 's', "5", 4));
+                        "Despesas Administrativas", 0, 'd', 's', "5", 3, 4));
                 Conta.store(new Conta("5.3.1", Contextos.getContextoAtual(),
-                        "Aluguel do Escritório", 0, 'd', 'a', "5.3", 0));
+                        "Aluguel do Escritório", 0, 'd', 'a', "5.3", 1, 0));
                 Conta.store(new Conta("5.3.2", Contextos.getContextoAtual(),
-                        "Material de Escritório", 0, 'd', 'a', "5.3", 0));
+                        "Material de Escritório", 0, 'd', 'a', "5.3", 2, 0));
                 Conta.store(new Conta("5.3.3", Contextos.getContextoAtual(),
                         "Salário do Pessoal Administrativo", 0, 'd', 'a',
-                        "5.3", 0));
+                        "5.3", 3, 0));
                 Conta.store(new Conta("5.3.4", Contextos.getContextoAtual(),
-                        "Encargos Sociais", 0, 'd', 'a', "5.3", 0));
+                        "Encargos Sociais", 0, 'd', 'a', "5.3", 4, 0));
                 // Honorários dos administradores
                 Conta.store(new Conta("5.4", Contextos.getContextoAtual(),
-                        "Honorários da administração", 0, 'd', 's', "5", 4));
+                        "Honorários da administração", 0, 'd', 's', "5", 4, 4));
                 Conta.store(new Conta("5.4.1", Contextos.getContextoAtual(),
-                        "Honorários da diretoria", 0, 'd', 'a', "5.4", 0));
+                        "Honorários da diretoria", 0, 'd', 'a', "5.4", 1, 0));
                 // Resultados financeiros
                 Conta.store(new Conta("5.5", Contextos.getContextoAtual(),
-                        "Resultados Financeiros", 0, 'r', 's', "5", 0));
+                        "Resultados Financeiros", 0, 'r', 's', "5", 5, 0));
                 Conta.store(new Conta("5.5.1", Contextos.getContextoAtual(),
-                        "Juros", 0, 'd', 'a', "5.5", 5));
+                        "Juros", 0, 'd', 'a', "5.5", 1, 5));
                 Conta.store(new Conta("5.5.2", Contextos.getContextoAtual(),
-                        "Correção Monetária da Dívida", 0, 'd', 'a', "5.5", 5));
+                        "Correção Monetária da Dívida", 0, 'd', 'a', "5.5", 2, 5));
                 Conta.store(new Conta("5.5.3", Contextos.getContextoAtual(),
-                        "Variação Cambial", 0, 'd', 'a', "5.5", 5));
+                        "Variação Cambial", 0, 'd', 'a', "5.5", 3, 5));
                 Conta.store(new Conta("5.5.4", Contextos.getContextoAtual(),
-                        "Receita Financeira", 0, 'r', 'a', "5.5", 5));
+                        "Receita Financeira", 0, 'r', 'a', "5.5", 4, 5));
                 Conta.store(new Conta("5.5.5", Contextos.getContextoAtual(),
-                        "Ganhos Extraordinários", 0, 'r', 'a', "5.5", 5));
+                        "Ganhos Extraordinários", 0, 'r', 'a', "5.5", 5, 5));
                 Conta.store(new Conta("5.5.6", Contextos.getContextoAtual(),
                         "Provisão para imposto de renda", 0, 'd', 'a',
-                        "5.5", 5));
+                        "5.5", 6, 5));
                 // Resultados não operacionais
                 Conta.store(new Conta("5.6", Contextos.getContextoAtual(),
-                        "Resultados não operacionais", 0, 'r', 's', "5", 0));
+                        "Resultados não operacionais", 0, 'r', 's', "5", 6, 0));
                 Conta.store(new Conta("5.6.1", Contextos.getContextoAtual(),
-                        "Receitas não operacionais", 0, 'r', 'a', "5.6", 6));
+                        "Receitas não operacionais", 0, 'r', 'a', "5.6", 1, 6));
                 Conta.store(new Conta("5.6.2", Contextos.getContextoAtual(),
-                        "Despesas não operacionais", 0, 'd', 'a', "5.6", 6));
+                        "Despesas não operacionais", 0, 'd', 'a', "5.6", 2, 6));
                 // Imposto de Renda e Contribuições Sociais
                 Conta.store(new Conta("5.7", Contextos.getContextoAtual(),
                         "Imposto de Renda e Contribuições Sociais", 0, 'd',
-                        's', "5", 0));
+                        's', "5", 7, 0));
                 Conta.store(new Conta("5.7.1", Contextos.getContextoAtual(),
-                        "Corrente", 0, 'd', 'a', "5.7", 7));
+                        "Corrente", 0, 'd', 'a', "5.7", 1, 7));
                 Conta.store(new Conta("5.7.2", Contextos.getContextoAtual(),
-                        "Diferido", 0, 'r', 'a', "5.7", 7));
+                        "Diferido", 0, 'r', 'a', "5.7", 2, 7));
                 // Imposto de Renda e Contribuições Sociais
                 Conta.store(new Conta("5.8", Contextos.getContextoAtual(),
-                        "Participações", 0, 'd', 's', "5", 0));
+                        "Participações", 0, 'd', 's', "5", 8, 0));
                 Conta.store(new Conta("5.8.1", Contextos.getContextoAtual(),
-                        "Debêntures", 0, 'd', 'a', "5.8", 8));
+                        "Debêntures", 0, 'd', 'a', "5.8", 1, 8));
                 Conta.store(new Conta("5.8.2", Contextos.getContextoAtual(),
-                        "Doações", 0, 'd', 'a', "5.8", 8));
+                        "Doações", 0, 'd', 'a', "5.8", 2, 8));
                 Conta.store(new Conta("5.8.3", Contextos.getContextoAtual(),
                         "Participação dos administradores", 0, 'd', 'a', "5.8",
-                        8));
+                        3, 8));
                 Conta.store(new Conta("5.8.4", Contextos.getContextoAtual(),
-                        "Participação minoritária", 0, 'd', 'a', "5.8", 8));
+                        "Participação minoritária", 0, 'd', 'a', "5.8", 4, 8));
             } catch (Exception e) {
                 e.printStackTrace();
             }

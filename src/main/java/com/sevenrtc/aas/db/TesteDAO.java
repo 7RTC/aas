@@ -88,7 +88,7 @@ public class TesteDAO {
         // Testa as funcionalidades da classe Conta
         {
             Conta con = new Conta("33.33.1", 2, "teste", (Number) Constantes.getFormatterValor().stringToValue("999,99"), 'z', 'z',
-                    null, 1);
+                    null, 1, 1);
             try {
                 Conta.store(con);
             } catch (Exception e1) {

@@ -2,7 +2,7 @@ Alliance Accounting System
 ===================================
 
  /* 
-  * Copyright (c) 2007-2012, AAS Contributors.
+  * Copyright (c) 2007-2013, AAS Contributors.
   * All rights reserved.
   *
   * Licensed under BSD 3-Clause License (http://www.opensource.org/licenses/BSD-3-Clause)
