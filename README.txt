@@ -34,3 +34,8 @@ Maven build instructions:
   mvn clean package assembly:single
   The built JAR and it's required libraries will be in target/dist
 
+--------------------------------------------------------------------------
+
+**WARNING**: This is an outdated project which has been mavenized and migrated from SourceForge.  
+It is kept alive mainly for historical reasons, and has received almost no maintenance since 
+2007. Contributors interested in taking over the project are welcome to contact us.
