@@ -188,9 +188,9 @@ public class AboutDialog extends JDialog {
 
 		mensagemCopyright.setName("mensagemCopyright");
 		mensagemCopyright
-				.setText("Copyright © 2007-2013 AAS Contributors. All rights reserved.");
+				.setText("Copyright © 2007-2020 AAS Contributors. All rights reserved.");
 		mensagemCopyright.setHorizontalAlignment(JLabel.TRAILING);
-		mensagemCopyright.setToolTipText("Copyright © 2007-2013 AAS Contributors");
+		mensagemCopyright.setToolTipText("Copyright © 2007-2020 AAS Contributors");
 		painelPrincipal.add(mensagemCopyright, cc.xywh(2, 6, 3, 1));
 
 		botaoFechar.setActionCommand("Fechar");
