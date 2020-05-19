@@ -17,3 +17,12 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+
+######################
+######  vscode  ######
+######################
+
+/.settings
+/.vscode
+/.classpath
+/.project
